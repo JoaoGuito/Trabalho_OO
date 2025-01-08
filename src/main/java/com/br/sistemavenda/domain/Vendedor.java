@@ -6,6 +6,8 @@ import jakarta.persistence.Id;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.Objects;
+
 @Entity
 //@Getter substitiu os getters e setters
 //@Setter
@@ -30,5 +32,17 @@ public class Vendedor extends Pessoa {
 
     public void setComissao(double comissao) {
         this.comissao = comissao;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public boolean vendedorExiste(){
+        return Objects.nonNull(this.id);
     }
 }

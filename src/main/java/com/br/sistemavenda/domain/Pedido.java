@@ -3,31 +3,36 @@ package com.br.sistemavenda.domain;
 import jakarta.persistence.*;
 
 import java.util.List;
+import java.util.Objects;
 
+@Entity
 public class Pedido {
 
     @Id
     @GeneratedValue
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST)
     private Cliente cliente;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.PERSIST)
     private Vendedor vendedor;
 
-    @OneToOne
-    private FormaPagamento pagamento;
+    @OneToOne(cascade = CascadeType.PERSIST)
+    private Pagamento pagamento;
 
     @OneToMany(cascade = CascadeType.ALL)
     private List<ItemPedido> itens;
 
-    public Pedido(Long id, Cliente cliente, Vendedor vendedor, FormaPagamento pagamento, List<ItemPedido> itens) {
+    public Pedido(Long id, Cliente cliente, Vendedor vendedor, Pagamento pagamento, List<ItemPedido> itens) {
         this.id = id;
         this.cliente = cliente;
         this.vendedor = vendedor;
         this.pagamento = pagamento;
         this.itens = itens;
+    }
+
+    public Pedido() {
     }
 
     public Long getId() {
@@ -54,11 +59,19 @@ public class Pedido {
         this.vendedor = vendedor;
     }
 
-    public FormaPagamento getPagamento() {
+    public void setItens(List<ItemPedido> itens) {
+        this.itens = itens;
+    }
+
+    public boolean clientNulo() {
+        return Objects.nonNull(this.cliente) && Objects.nonNull(this.cliente.getId());
+    }
+
+    public Pagamento getPagamento() {
         return pagamento;
     }
 
-    public void setPagamento(FormaPagamento pagamento) {
+    public void setPagamento(Pagamento pagamento) {
         this.pagamento = pagamento;
     }
 
@@ -66,7 +79,11 @@ public class Pedido {
         return itens;
     }
 
-    public void setItens(List<ItemPedido> itens) {
-        this.itens = itens;
+    public boolean vendedorNulo() {
+        return this.vendedor.vendedorExiste();
+    }
+
+    public boolean pagamentoNulo() {
+        return Objects.nonNull(this.pagamento) && Objects.nonNull(this.pagamento.getId());
     }
 }

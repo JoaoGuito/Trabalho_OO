@@ -1,8 +1,8 @@
 package com.br.sistemavenda.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+
+import java.util.Objects;
 
 @Entity
 public class ItemPedido {
@@ -11,12 +11,17 @@ public class ItemPedido {
     @GeneratedValue
     private Long id;
     private int quantidade;
+    @OneToOne(cascade = CascadeType.ALL)
     private Produto produto;
 
     public ItemPedido(Long id, int quantidade, Produto produto) {
         this.id = id;
         this.quantidade = quantidade;
         this.produto = produto;
+    }
+
+    public ItemPedido() {
+
     }
 
     public Long getId() {
@@ -41,5 +46,9 @@ public class ItemPedido {
 
     public void setProduto(Produto produto) {
         this.produto = produto;
+    }
+
+    public boolean produtoExiste() {
+        return Objects.nonNull(this.produto) && Objects.nonNull(this.produto.getId());
     }
 }
